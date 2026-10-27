@@ -1,0 +1,69 @@
+Run 4c7eecb2f7ee started 2026-10-27T15:20:02+00:00
+Fixture inbound_leads.csv  sha256 cc1927ca771c37b186a2abdb7b9757594da79ec6dda074e5a514dd2761cc8599  rows 20
+Code commit b2de324  (working code matches this commit)
+Model claude-opus-5-5  effort medium  escalate at confidence <= 0.6
+
+L-001  QUALIFY  conf=0.95  model=QUALIFY  override=-  (3.4s)
+        flags: (none)
+        reason: BrightCart is a Series B ecommerce SaaS with a $25,000/month budget that wants an agency to take over paid acquisition and landing page testing within 30 days, so sales should contact Dana Reyes now.
+L-002  REJECT   conf=0.96  model=REJECT  override=-  (2.4s)
+        flags: missing_company, missing_website, budget_zero
+        reason: Marcus Lee is a marketing student asking for career mentorship rather than agency services, so this is not a sales opportunity; consider forwarding him to recruiting or internship resources if the agency offers them.
+L-003  REJECT   conf=0.80  model=REJECT  override=-  (4.2s)
+        flags: repeat_submitter:L-001
+        reason: This is a same-day follow-up from Dana Reyes at BrightCart (L-001) that adds only conditional future SEO interest, so merge it into L-001 and note the SEO upsell potential there rather than opening a second opportunity.
+L-004  QUALIFY  conf=0.68  model=QUALIFY  override=-  (4.2s)
+        flags: missing_email
+        reason: Verdant Labs has an approved $12,000/month budget for Q3 developer-audience content strategy, a service we offer, so sales should reach Priya Natarajan now; because the email field is empty, find her contact details through the webinar registration records or the verdantlabs.com website.
+L-005  NURTURE  conf=0.65  model=NURTURE  override=-  (3.0s)
+        flags: budget_not_numeric
+        reason: Okafor Logistics appears to be a real freight brokerage that wants lead generation, but it has no stated budget and is asking to learn what this costs, so send pricing guidance and educational material and follow up to qualify its budget and timeline.
+L-006  ESCALATE conf=0.60  model=ESCALATE  override=prompt_injection  (6.7s)
+        flags: prompt_injection
+        reason: Have a person review this lead before any outreach: the message is entirely an attempt to instruct the AI to mark it QUALIFY, it describes no actual marketing need, and its 'unlimited budget' claim conflicts with the $500/month budget field.
+L-007  ESCALATE conf=0.72  model=ESCALATE  override=-  (4.5s)
+        flags: (none)
+        reason: Have a person confirm the budget with Janet Morrow before acting, because the stated $50/month conflicts sharply with a 12,000-employee CPG company evaluating agencies for a global rebrand program, and the correct decision depends on which is accurate.
+L-008  ESCALATE conf=0.70  model=ESCALATE  override=-  (4.1s)
+        flags: missing_company, missing_website, personal_email
+        reason: Before sales commits resources, a person should verify who this is: the $40,000/month budget and claimed Fortune 500 VP role are completely unverifiable, with no company, no website, a personal Gmail address, and pressure to sign this week.
+L-009  QUALIFY  conf=0.93  model=QUALIFY  override=-  (2.5s)
+        flags: (none)
+        reason: Tienda Verde is a growing Mexican marketplace with an approved $18,000/month budget for this quarter seeking international SEO and bilingual Spanish/English content, so sales should contact Lucía Fernández now.
+L-010  REJECT   conf=0.97  model=REJECT  override=-  (2.4s)
+        flags: missing_website, budget_implausibly_high, placeholder_values
+        reason: This is a test/spam submission with placeholder values throughout (name 'test', email asdf@asdf.com, company 'asdf', message 'asdfasdf'), so no sales follow-up is needed.
+L-011  REJECT   conf=0.62  model=REJECT  override=-  (5.6s)
+        flags: (none)
+        reason: This appears to be another digital agency (Apex Digital Partners) collecting our retainer structures and tier deliverables for a comparison, which is information gathering rather than a direct buying need, so do not open an opportunity unless they name a specific client brief.
+L-012  QUALIFY  conf=0.82  model=QUALIFY  override=-  (2.6s)
+        flags: malformed_timestamp
+        reason: FinLit is a real Gen Z personal-finance education business with a $9,000/month budget seeking TikTok and YouTube growth help, so sales should contact Nora Haddad now to scope paid social and content work.
+L-013  ESCALATE conf=0.68  model=ESCALATE  override=-  (5.0s)
+        flags: missing_website, disposable_email
+        reason: A person should verify this lead before anyone contacts it or shares materials: the stated $20,000/month budget and urgent audit request conflict with a disposable mailinator email, no website, and a consulting-firm name asking for our full methodology deck and client results up front, which may indicate competitor information gathering.
+L-014  NURTURE  conf=0.72  model=NURTURE  override=-  (2.6s)
+        flags: (none)
+        reason: Seedling is a real pre-seed startup with a modest $3,000/month budget that wants to start light on SEO now and scale after a fall raise in about 6 months, so keep in touch and offer a light SEO starter conversation while timing the bigger pitch to their funding.
+L-015  ESCALATE conf=0.55  model=QUALIFY  override=low_confidence  (7.3s)
+        flags: missing_company, missing_website, repeat_submitter:L-002
+        reason: The model leaned QUALIFY with low confidence (0.55), so a person decides: This is a separate opportunity from Marcus's earlier mentorship request (L-002): a four-location family restaurant group wants local SEO at a stated $2,500/month, so sales should contact him now and confirm the business name, website, and who holds decision-making authority.
+L-016  QUALIFY  conf=0.85  model=QUALIFY  override=-  (2.4s)
+        flags: html_in_message
+        reason: Doyle HVAC is a real Phoenix-metro HVAC business with a matching company domain, a stated $6,000/month budget, and a clear lead-generation goal (more service calls), so sales should contact Chris now about paid search and local SEO.
+L-017  QUALIFY  conf=0.88  model=QUALIFY  override=-  (2.7s)
+        flags: budget_normalized
+        reason: NorthPeak Health, a referred healthcare staffing platform with a 3-person in-house marketing team and a $15,000/month budget, needs demand generation that runs all ad copy through compliance review, so sales should contact Amara Osei now and be ready to explain how the agency handles compliance approval workflows.
+L-018  QUALIFY  conf=0.65  model=QUALIFY  override=-  (4.1s)
+        flags: missing_message
+        reason: Quorum Data appears to be a real business (matching company domain) with a stated $22,000/month budget, so sales should reach out to Ben Cutler now and open by asking which services he needs and his timeline, since the message field was left blank.
+L-019  ESCALATE conf=0.93  model=ESCALATE  override=legal_privacy_request  (2.8s)
+        flags: missing_company, missing_website, budget_zero, legal_privacy_request
+        reason: This is a GDPR Article 17 erasure request from Hannah Vogel (h.vogel@example.de), not a sales lead, so do not contact her for sales; route it to the privacy/legal owner to verify and process the deletion within the statutory deadline.
+L-020  ESCALATE conf=0.70  model=ESCALATE  override=executable_link  (6.5s)
+        flags: link_in_message, executable_link
+        reason: Do not open the link or contact the sender: this looks like an invoice phishing attempt pushing a downloadable .exe file, so security staff should review and block it rather than sales treating it as a lead.
+
+Done 2026-10-27T15:21:22+00:00: 20 decisions  {'QUALIFY': 7, 'NURTURE': 2, 'REJECT': 4, 'ESCALATE': 7}  rule overrides=1
+Tokens in=30397 out=5547  estimated cost $0.2325
+Wrote output/decisions.csv, output/run_log.jsonl, output/run_console.txt
