@@ -1,0 +1,7 @@
+# Secrets: API keys live in .env and must never be committed.
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
