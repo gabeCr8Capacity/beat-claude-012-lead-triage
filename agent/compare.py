@@ -13,6 +13,7 @@ from pathlib import Path
 
 WORK = Path(__file__).resolve().parent.parent
 OUT_DIR = WORK / "output"
+PREVIOUS_RUN_DIR = OUT_DIR / "run1_before"  # first run, kept as "before" evidence
 DECISIONS = ["QUALIFY", "NURTURE", "REJECT", "ESCALATE"]
 
 
@@ -42,7 +43,9 @@ def main():
         "# Agent vs. manual labels",
         "",
         f"- Run `{run['run_id']}`, started {run['started_at']}, model `{run['model']}` (effort {run['effort']}), "
-        f"git commit `{run['git_commit']}`",
+        f"git commit `{run['git_commit']}`" + (
+            "" if "code_uncommitted" not in run else
+            f" ({'WARNING: ran with uncommitted changes in ' + ', '.join(run['uncommitted_files']) if run['code_uncommitted'] else 'code matched this commit'})"),
         f"- Fixture `{run['fixture']}`, SHA-256 `{run['fixture_sha256']}`",
         f"- Manual labels: `manual_labels.csv`, written blind before the agent was built",
         "",
@@ -75,21 +78,39 @@ def main():
         a, h = agent[i], human[i]
         lines += [
             f"### {i}: manual {h['decision']}, agent {a['decision']}",
-            f"- Model said: {a['model_decision'] or '(no model output)'}; decided by: `{a['decided_by']}`; confidence {a['confidence']}",
+            f"- Model said: {a['model_decision'] or '(no model output)'}; decided by: `{a['decided_by']}`; "
+            f"model confidence {a['confidence']}; override: {a.get('override') or 'none'}",
             f"- Flags: {a['flags'] or '(none)'}",
             f"- Agent reason: {a['reason']}",
             f"- Manual reason: {h['reason']}",
             "",
         ]
 
+    if PREVIOUS_RUN_DIR.exists() and PREVIOUS_RUN_DIR != OUT_DIR:
+        before = read_csv(PREVIOUS_RUN_DIR / "decisions.csv")
+        with open(PREVIOUS_RUN_DIR / "run_log.jsonl", encoding="utf-8") as f:
+            before_run = json.loads(f.readline())
+        before_match = sum(before[i]["decision"] == human[i]["decision"] for i in both if i in before)
+        changed = [i for i in both if i in before and before[i]["decision"] != agent[i]["decision"]]
+        lines += ["## Changes since the previous run", "",
+                  f"- [Observed] Previous run `{before_run['run_id']}` matched manual labels on "
+                  f"{before_match}/{len(both)}; this run matches {len(final_match)}/{len(both)}",
+                  f"- [Observed] Leads whose final decision changed: {len(changed)}", ""]
+        if changed:
+            lines += ["| Lead | Manual | Before | After | Model confidence before -> after |", "|---|---|---|---|---|"]
+            for i in changed:
+                lines.append(f"| {i} | {human[i]['decision']} | {before[i]['decision']} | {agent[i]['decision']} | "
+                             f"{before[i]['confidence']} -> {agent[i]['confidence']} |")
+            lines.append("")
+
     lines += ["## All leads", "",
-              "| Lead | Manual | Agent | Match | Model said | Decided by | Conf. | Agent reason |",
+              "| Lead | Manual | Agent | Match | Model said | Model conf. | Override | Agent reason |",
               "|---|---|---|---|---|---|---|---|"]
     for i in both:
         a, h = agent[i], human[i]
         match = "yes" if i in final_match else "**no**"
         lines.append(f"| {i} | {h['decision']} | {a['decision']} | {match} | {a['model_decision']} | "
-                     f"`{a['decided_by']}` | {a['confidence']} | {cell(a['reason'])} |")
+                     f"{a['confidence']} | {a.get('override') or '-'} | {cell(a['reason'])} |")
 
     (OUT_DIR / "comparison.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Final match {len(final_match)}/{len(both)}; model-only match {len(model_match)}/{len(both)}; "
