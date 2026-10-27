@@ -2,7 +2,7 @@
 
 **Brief version: 2026-07**
 **Fixture checksum** [Observed]: `fixtures/inbound_leads.csv`, SHA-256 `cc1927ca771c37b186a2abdb7b9757594da79ec6dda074e5a514dd2761cc8599`. The hash is for the file with LF line endings; git on Windows may convert the file to CRLF on clone, which changes the hash.
-**Submitted run** [Observed]: `4c7eecb2f7ee` on code commit `b2de324`, with no uncommitted changes. Outputs are in `output/decisions.csv` and `output/run_log.jsonl`.
+**Submitted run** [Observed]: `4c7eecb2f7ee` on commit `fd2d5a6`, no uncommitted changes (logged as `b2de324`, its ID before `work/` was split into this repo; identical files).
 
 ---
 
@@ -55,7 +55,7 @@ It was stopped twice. The regex in step 1 flagged it. Separately, the model chos
 In run 1 (`8e451fd032ea`, files in `output/run1_before/decisions.csv`), the agent **qualified L-007**. The lead is a 12,000-employee company with a $50/month budget. The model decided the budget was "almost certainly a typo or entered in thousands", at a confidence of exactly 0.60 [Observed]. My rule escalated only *below* 0.60, so the lead got through: a confident wrong answer on a conflicting-data trap.
 
 - **How I caught it:** I labeled all 20 leads by hand before the agent was built [Observed]. The comparison script listed L-007 as a disagreement.
-- **What I changed** (commit `b2de324`):
+- **What I changed** (commit `fd2d5a6`):
   1. A prompt rule: *never assume a value is a typo or guess a correction; take every field as written; if fields conflict in a way that would change the decision, escalate.*
   2. The cutoff is now **at or below** 0.60 [Assumed].
 - **Result:** in run 2, L-007 is ESCALATE at 0.72, and the reason says the right decision depends on which number is accurate [Observed]. The prompt change fixed it, not the cutoff: the model escalated on its own. The new cutoff hasn't fired in a real run yet.
@@ -81,7 +81,7 @@ Code is in `agent/`. The submitted run is `output/decisions.csv` (20 rows [Obser
 
 ## 3. Artifact access
 
-Repo: **[link added when pushed]**. It's public, with no login. To re-run:
+Repo: https://github.com/gabeCr8Capacity/beat-claude-012-lead-triage (public, no login). To re-run:
 
 ```
 pip install -r requirements.txt
@@ -101,7 +101,7 @@ A full run took 80 seconds and cost $0.23 [Observed] (30,397 input and 5,547 out
 | All 20 rows processed by the submitted run [Observed] | `output/run_log.jsonl` (request + response per lead), `output/decisions.csv` | Tier 3 |
 | Stated fixture and code were used | `fixture_sha256`, `git_commit`, `code_uncommitted: false` in the first line of `run_log.jsonl` | Tier 3 |
 | L-006 injection not obeyed | L-006 entry in `run_log.jsonl` | Tier 3 |
-| L-007 found and fixed | `output/run1_before/decisions.csv` vs. `output/decisions.csv`, commit `b2de324` | Tier 4 |
+| L-007 found and fixed | `output/run1_before/decisions.csv` vs. `output/decisions.csv`, commit `fd2d5a6` | Tier 4 |
 | 17/20 match with my manual pass [Observed] | `manual_labels.csv`, `output/comparison.md` | Tier 4 |
 | No API key in any file or commit | `py agent/check_secrets.py` | Tier 3 |
 | About 175 reviews a week at 500 leads [Estimated] | Arithmetic only; not tested at volume | Tier 0 |
