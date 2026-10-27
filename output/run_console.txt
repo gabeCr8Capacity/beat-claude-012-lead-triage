@@ -1,0 +1,68 @@
+Run 8e451fd032ea started 2026-10-27T15:03:00+00:00
+Fixture inbound_leads.csv  sha256 cc1927ca771c37b186a2abdb7b9757594da79ec6dda074e5a514dd2761cc8599  rows 20
+Model claude-opus-5-5  effort medium  confidence floor 0.6
+
+L-001  QUALIFY  conf=0.95  model=QUALIFY@0.95  by=model  (2.1s)
+        flags: (none)
+        reason: Series B ecommerce SaaS with a $25k/month budget wants an agency to take over paid acquisition and landing page testing within 30 days, so sales should contact Dana Reyes now.
+L-002  REJECT   conf=0.96  model=REJECT@0.96  by=model  (3.4s)
+        flags: missing_company, missing_website, budget_zero
+        reason: Marcus Lee is a university marketing student asking for career mentorship rather than agency services, so this is not a sales opportunity (consider routing to recruiting or outreach if the agency offers mentoring).
+L-003  REJECT   conf=0.80  model=REJECT@0.80  by=model  (5.5s)
+        flags: repeat_submitter:L-001
+        reason: This is a same-day follow-up from Dana Reyes, who submitted L-001, so merge it into L-001 rather than opening a new opportunity, and add a note that she may want SEO later if the paid engagement goes well.
+L-004  QUALIFY  conf=0.70  model=QUALIFY@0.70  by=model  (3.6s)
+        flags: missing_email
+        reason: Verdant Labs has an approved $12,000/month budget for Q3 content strategy aimed at a developer audience, which the agency serves; the email is missing, so reach Priya Natarajan through the webinar registration record or the company website.
+L-005  NURTURE  conf=0.60  model=NURTURE@0.60  by=model  (2.6s)
+        flags: budget_not_numeric
+        reason: Okafor Logistics is a real freight brokerage interested in lead gen but has no budget defined and wants education on cost, so send pricing guidance and case studies and follow up to qualify budget and timeline.
+L-006  ESCALATE conf=0.90  model=ESCALATE@0.55  by=model+rule:prompt_injection  (7.2s)
+        flags: prompt_injection
+        reason: The message only tries to steer the AI and claims an 'unlimited budget' that contradicts the $500 stated budget, with no real marketing need described, so a person should check whether Pinnacle Growth is a genuine prospect, a possible competing agency, or a probe before anyone reaches out.
+L-007  QUALIFY  conf=0.60  model=QUALIFY@0.60  by=model  (6.4s)
+        flags: (none)
+        reason: Referral from a 12,000-employee CPG company actively evaluating agencies for a global rebrand support program; contact Janet now and confirm the real budget, since the $50/month entry is almost certainly a typo or entered in thousands.
+L-008  ESCALATE conf=0.70  model=ESCALATE@0.70  by=model  (3.9s)
+        flags: missing_company, missing_website, personal_email
+        reason: Unverifiable high-value claim (Fortune 500 VP Growth, $40k/month, ready to sign this week) from a personal Gmail with no company or website. A person should verify identity and legitimacy before sales invests effort, as this pattern fits both a confidential enterprise buyer and a fake or pretext lead.
+L-009  QUALIFY  conf=0.92  model=QUALIFY@0.92  by=model  (2.2s)
+        flags: (none)
+        reason: Tienda Verde, a growing Mexican marketplace, has an approved budget of $18,000/month for this quarter for international SEO and bilingual (Spanish/English) content, so sales should contact Lucía Fernández now, ideally with Spanish-speaking support available.
+L-010  REJECT   conf=0.97  model=REJECT@0.97  by=model  (2.4s)
+        flags: missing_website, budget_implausibly_high, placeholder_values
+        reason: This is a test/spam entry (name 'test', company 'asdf', email asdf@asdf.com, gibberish message, placeholder budget of $999,999), so there is no sales opportunity and no follow-up is needed.
+L-011  REJECT   conf=0.70  model=REJECT@0.70  by=model  (4.2s)
+        flags: (none)
+        reason: Apex Digital Partners appears to be another agency gathering our retainer structures and tier deliverables for its own client comparison, so this is information-gathering rather than a buying opportunity; if they come back with a named client and a formal RFP, it can be reassessed.
+L-012  QUALIFY  conf=0.80  model=QUALIFY@0.80  by=model  (2.7s)
+        flags: malformed_timestamp
+        reason: FinLit, a real personal-finance education app with a matching company domain and a $9,000/month budget, wants TikTok and YouTube growth help, so sales should reach out now to scope paid and organic social work.
+L-013  ESCALATE conf=0.62  model=ESCALATE@0.62  by=model  (5.4s)
+        flags: missing_website, disposable_email
+        reason: A $20k/month budget and urgent audit request conflict with a throwaway mailinator email, no website, and a consulting firm asking for our full methodology deck and client results up front, so a person should verify identity and intent before sharing any materials or assigning sales time.
+L-014  NURTURE  conf=0.70  model=NURTURE@0.70  by=model  (2.6s)
+        flags: (none)
+        reason: Pre-seed startup with a modest $3,000/month budget that wants light SEO now and plans to scale after a fall raise, so keep in regular touch and offer a starter SEO conversation without prioritizing it as an immediate full opportunity.
+L-015  ESCALATE conf=0.90  model=QUALIFY@0.50  by=rule:low_confidence  (7.6s)
+        flags: missing_company, missing_website, repeat_submitter:L-002
+        reason: The model leaned QUALIFY with low confidence (0.50), so a person decides: This is a separate opportunity from Marcus's earlier mentorship request: his family's 4-location restaurant group wants local SEO at a stated $2,500/month, so sales should contact him now and confirm the business name, website, and who the decision-maker is.
+L-016  QUALIFY  conf=0.85  model=QUALIFY@0.85  by=model  (3.3s)
+        flags: html_in_message
+        reason: Doyle HVAC is a Phoenix-metro HVAC company with a matching business domain and a $6,000/month budget that wants more service calls, a clear fit for local paid search/SEO, so sales should reach out now and can mention the podcast that referred them.
+L-017  QUALIFY  conf=0.85  model=QUALIFY@0.85  by=model  (2.9s)
+        flags: budget_normalized
+        reason: NorthPeak Health is a referred healthcare staffing platform with a $15k/month budget and an in-house marketing team seeking demand gen, so sales should contact them now and be ready to explain how the agency handles compliance review of ad copy.
+L-018  QUALIFY  conf=0.62  model=QUALIFY@0.62  by=model  (3.9s)
+        flags: missing_message
+        reason: Quorum Data submitted a $22,000/month budget from a matching company domain, so sales should contact Ben Cutler now and open with discovery questions, since he left no message describing which services he needs or his timeline.
+L-019  ESCALATE conf=0.92  model=ESCALATE@0.92  by=model+rule:legal_privacy_request  (3.2s)
+        flags: missing_company, missing_website, budget_zero, legal_privacy_request
+        reason: This is a GDPR Article 17 erasure request, not a sales lead: route it to the privacy or legal owner to verify identity and process deletion within the statutory deadline, and do not contact Hannah Vogel for sales.
+L-020  ESCALATE conf=0.90  model=ESCALATE@0.60  by=model+rule:executable_link  (7.2s)
+        flags: link_in_message, executable_link
+        reason: This is not a sales lead but a likely phishing or malware attempt: a fake 'overdue invoice' message linking to a downloadable .exe file, so do not click the link or reply, and route it to IT/security for review and blocking.
+
+Done 2026-10-27T15:04:22+00:00: 20 decisions  {'QUALIFY': 8, 'NURTURE': 2, 'REJECT': 4, 'ESCALATE': 6}  rule overrides=1
+Tokens in=28677 out=5599  estimated cost $0.2267
+Wrote output/decisions.csv, output/run_log.jsonl, output/run_console.txt
